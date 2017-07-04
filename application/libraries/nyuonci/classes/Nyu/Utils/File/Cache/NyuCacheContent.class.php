@@ -2,13 +2,14 @@
 /**
  * 2016 Nyu Framework
  */
+namespace nyu\utils\cache;
 /**
  * Classe do Nyu para gerenciar arquivos de cache
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
- * @package NyuCore
+ * @package nyu\utils\cache
  * @version 1.0
  */
-class NyuCacheContent {
+class CacheContent {
     /**
      * Conteúdo que será salvo em cache
      * @var string
