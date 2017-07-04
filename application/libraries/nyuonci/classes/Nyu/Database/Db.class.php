@@ -13,7 +13,7 @@ namespace Nyu\Database;
 class Db extends \Nyu\Core\CI{
     /**
      * Objeto de conexão PDO utilizado para as operações em banco de dados
-     * @var PDO
+     * @var CI_DB
      */
     protected $con;
     
@@ -35,6 +35,12 @@ class Db extends \Nyu\Core\CI{
      * @var string
      */
     protected static $lastQuery;
+    
+    /**
+     * Indica se está ou não dentro de uma transação
+     * @var boolean
+     */
+    protected $inTransaction;
  
     /**
      * Método singleton da classe NyuDb
@@ -76,7 +82,15 @@ class Db extends \Nyu\Core\CI{
      */
     public function __construct() {
         parent::__construct();
+        $this->inTransaction = false;
         $this->start();
+    }
+    
+    /**
+     * Carrega a condiguração do banco de dados
+     */
+    protected function __connect($config = 'default'){
+        return $this->CI->load->database($config);
     }
     
     /**
@@ -96,48 +110,10 @@ class Db extends \Nyu\Core\CI{
             $database_config_name = $nyu__database_config;
         }
         
-        // Carrega as configurações de banco de dados
-        $database_config = \Nyu\Core\Config::getConfig('database', $database_config_name);
-        
-        // Se é mysql ou não especificou, carrega no padrão mysql
-        if($database_config['driver'] == 'mysql' || !$database_config['driver']){
-            // Trata o host:porta
-            $hosttmp = $database_config['host'];
-            $hosttmp = explode('//', $hosttmp);
-            $hosttmp = implode($hosttmp);
-            $hosttmp = explode(':',$hosttmp);
-            $hostqtde = count($hosttmp);
-            if($hostqtde > 2){
-                $host = $hosttmp[$hostqtde - 2];
-                $port = $hosttmp[$hostqtde - 1];
-            }else{
-                $host = $hosttmp[0];
-                $port = @$hosttmp[1];
-            }
-            $dsn = "mysql:dbname={$database_config['name']};host={$host}".($port ? ";port={$port}" : '');
-        // Se é sql server
-        }elseif($database_config['driver'] == 'mssql'){
-            $dsn = "dblib:host={$database_config['host']};dbname={$database_config['name']}";
-        // Se é oracle
-        }elseif($database_config['driver'] == 'oracle'){
-            $dsn = "oci:dbname={$database_config['tns']}";
-        // Se o driver é sqlite
-        }elseif($database_config['driver'] == 'sqlite'){
-            $dsn = "sqlite:{$database_config['path']}";
-        //Se o driver é odbc
-        }elseif($database_config['driver'] == 'odbc'){
-            $dsn = $database_config['path'];
-        // Se o driver é custom, carrega a string informada
-        }elseif($database_config['driver'] == 'custom'){
-            $dsn = $database_config['custom'];
-        }
-        // Cria a conexão, informando que deve retornar exceptions
-        $this->con = new \PDO($dsn, @$database_config['user'], @$database_config['password'], array(
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
-        ));
+        $this->con = __connect($database_config_name);
         
         // Inicia uma transação
-        $this->con->beginTransaction();
+        $this->beginTransaction();
     }
     
     /**
@@ -146,8 +122,13 @@ class Db extends \Nyu\Core\CI{
      * se necessário
      */
     public function beginTransaction(){
-        if(!$this->con->inTransaction()){
-            $this->con->beginTransaction();
+        if(!$this->inTransaction) {
+            $this->inTransaction = true;
+            $this->con->trans_begin();
+            $this->con->trans_start();
+            if($this->con === FALSE){
+               throw new Exception('Não foi possível iniciar a transação');
+           }
         }
     }
     
@@ -174,14 +155,27 @@ class Db extends \Nyu\Core\CI{
      * Faz commit da transação atual
      */
     public function commit() {
-        $this->con->commit();
+        if($this->con->trans_status() === TRUE){
+            $this->con->trans_commit();
+            $this->con->trans_complete();
+        }
+        $this->close();
     }
 
     /**
      * Faz rollback da transação atual
      */
     public function rollback() {
-        $this->con->rollBack();
+        if($this->con->trans_status() === TRUE){
+           $this->con->trans_rollback();
+       }
+       $this->close();
+    }
+    
+    public function close(){
+        if($this->con->trans_status() === TRUE){
+            $this->con->close();
+        }
     }
 
     /**
@@ -253,15 +247,14 @@ class Db extends \Nyu\Core\CI{
             }
             $values = $tmp_values;
         }
-        
-        $stmt = $this->con->prepare($sql);
-        $ret = $stmt->execute($values);
+
+        $ret = $this->con->query($sql, $values);
         
         self::setLastQuery($sql);
 
         if ($ret) {
             if(!$obj->$getPk()){ // se não possui id, atualiza o objeto
-                $id = $this->con->lastInsertId();
+                $id = $this->con->insert_id();
                 \Nyu\Core\Core::saveInSess("lastInsertId", $id);
                 $obj->$setPk((($id) ? $id : $pk_value));
             }
@@ -284,12 +277,11 @@ class Db extends \Nyu\Core\CI{
         $searchField = (($searchField) ? $searchField : $table);
         $sql = "select count(*) as q from {$table} where {$searchField} = ?";
         
-        $stmt = $this->con->prepare($sql);
-        $res = $stmt->execute(array($value));
+        $res = $this->con->query($sql, array($value));
         
         self::setLastQuery($sql);
 
-        $qtde = $stmt->fetchAll();
+        $qtde = $res->result_array();
         if ((integer) $qtde[0]['q'] > 0) {
             return true;
         } else {
@@ -310,8 +302,7 @@ class Db extends \Nyu\Core\CI{
         $searchField = (($searchField) ? $searchField : $table);
         $sql = "delete from {$table} where {$searchField} = ? ";
         
-        $stmt = $this->con->prepare($sql);
-        $r = $res = $stmt->execute(array($value));
+        $r = $this->con->query($sql, array($value));
         
         self::setLastQuery($sql);
 
@@ -358,20 +349,15 @@ class Db extends \Nyu\Core\CI{
         }elseif(is_null($iniReg) && !is_null($limit)){
             $sql .= " limit {$limit}";
         }
-
-        $stmt = $this->con->prepare($sql);
-        if(isset($bindWhere)){
-            $ret = $res = $stmt->execute($bindWhere);
-        }else{
-            $ret = $res = $stmt->execute();
-        }
+        
+        $res = $this->con->query($sql, $bindWhere);
         
         self::setLastQuery($sql);
 
-        if (!$ret) {
+        if (!$res) {
             return false;
         }
-        $ret = $stmt->fetchAll();
+        $ret = $res->result_array();
         if ($ret) {
             foreach ($ret as $val) {
                 $o = new $class();
@@ -425,8 +411,6 @@ class Db extends \Nyu\Core\CI{
             }
         }
 
-        $stmt = $this->con->prepare($sql);
-
         $params[] = $obj->$getMethod();
 
         if ($extraSearchField) {
@@ -435,14 +419,14 @@ class Db extends \Nyu\Core\CI{
             }
         }
 
-        $ret = $res = $stmt->execute($params);
+        $res = $this->con->query($sql, $params);
         
         self::setLastQuery($sql);
 
-        if (!$ret) {
+        if (!$res) {
             return false;
         }
-        $ret = $stmt->fetchAll();
+        $ret = $res->result_array();
         if ($ret) {
 
             //$obj = false;
@@ -485,15 +469,14 @@ class Db extends \Nyu\Core\CI{
                 (($where) ? " and (" . $where . ") " : "") . 
                 (($order) ? " order by " . implode(", ", $order) : "");
         
-        $stmt = $this->con->prepare($sql);
-        $ret = $res = $stmt->execute(array($key));
+        $res = $this->con->query($sql, array($key));
         
         self::setLastQuery($sql);
 
-        if (!$ret) {
+        if (!$res) {
             return false;
         }
-        $ret = $stmt->fetchAll();
+        $ret = $res->result_array();
         if ($ret) {
             foreach ($ret as $val) {
                 $o = new $class();
@@ -516,19 +499,14 @@ class Db extends \Nyu\Core\CI{
      */
     public function query($sql, $bind=null) {
         
-        $res = $this->con->prepare($sql);
-        if ($bind) {
-            $ret = $res->execute($bind);
-        } else {
-            $ret = $res->execute();
-        }
+        $res = $this->con->query($sql, $bind);
         
         self::setLastQuery($sql);
         
-        if (!$ret) {
+        if (!$res) {
             return false;
         }
-        $ret = $res->fetchAll();
+        $ret = $res->result_array();
         if ($ret) {
             return $ret;
         } else {
@@ -547,17 +525,16 @@ class Db extends \Nyu\Core\CI{
     public function count($table, $key = null, $searchField = null){
         $sql = "select count(*) as q from {$table} " . 
                 (($key)?(($searchField)?" where {$searchField} = ? ":" where {$table} = ? "):"");
-                
-        $res = $this->con->prepare($sql);
+        
         if($key){
-            $ret = $res->execute(array($key));
+            $res = $this->con->query($sql, array($key));
         }else{
-            $ret = $res->execute();
+            $res = $this->con->query($sql);
         }
         
         self::setLastQuery($sql);
 
-        $qtde = $res->fetchAll();
+        $qtde = $res->result_array();
         if($qtde){
             return $qtde[0]['q'];
         }else{
@@ -573,16 +550,11 @@ class Db extends \Nyu\Core\CI{
      */
     public function execute($sql, $bind=null) {
 
-        $res = $this->con->prepare($sql);
-        if ($bind) {
-            $ret = $res->execute($bind);
-        } else {
-            $ret = $res->execute();
-        }
+        $res = $this->con->query($sql, $bind);
         
         self::setLastQuery($sql);
 
-        if (!$ret) {
+        if (!$res) {
             return false;
         }
         if ($ret) {
@@ -603,7 +575,7 @@ class Db extends \Nyu\Core\CI{
      * @since 6.0
      */
     public function quickexec($sql, $commit=true){
-        $ret = $this->con->exec($sql);
+        $ret = $this->execute($sql);
         self::setLastQuery($sql);
         if($commit){
             $this->commit();

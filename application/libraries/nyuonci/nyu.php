@@ -20,33 +20,39 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "helpers" . DIRECTORY_SEP
  * @version 3.0
  */
 function nyuAutoload($class){
-    
-    /* Classes do core do sistema */
+    global $nyu__config;
+    /* Classes do Nyu */
     if (file_exists(APPPATH."libraries/nyuonci/classes/".str_replace('\\', '/', $class).".class.php")){
         require_once (APPPATH."libraries/nyuonci/classes/".str_replace('\\', '/', $class).".class.php");
-    /* MVC */
-    }elseif(file_exists(SITE_FOLDER.Nyu\Core\Config::getConfig('mvc', 'controllers_path').str_replace('\\', '/', $class).".class.php")){
-        require_once (SITE_FOLDER.Nyu\Core\Config::getConfig('mvc', 'controllers_path').str_replace('\\', '/', $class).".class.php");
-    }elseif(file_exists(SITE_FOLDER.Nyu\Core\Config::getConfig('mvc', 'models_path').str_replace('\\', '/', $class).".class.php")){
-        require_once (SITE_FOLDER.Nyu\Core\Config::getConfig('mvc', 'models_path').str_replace('\\', '/', $class).".class.php");
-    /* Libs diretas (sem diretório da lib) */
-    }elseif (file_exists(SITE_FOLDER.'/'.Nyu\Core\Config::getConfig("lib_folder").'/'.str_replace('\\', '/', $class).".class.php")){ // Classes em libs
-        require_once (SITE_FOLDER.'/'.Nyu\Core\Config::getConfig("lib_folder").'/'.str_replace('\\', '/', $class).".class.php");
-    /* Interfaces do sistema */
+    /* Interfaces do Nyu */
     }elseif (file_exists(APPPATH."libraries/nyuonci/interfaces/".str_replace('\\', '/', $class).".interface.php")){
         require_once (APPPATH."libraries/nyuonci/interfaces/".str_replace('\\', '/', $class).".interface.php");
-    /* traits do sistema */
+    /* traits do Nyu */
     }elseif (file_exists(APPPATH."libraries/nyuonci/traits/".str_replace('\\', '/', $class).".trait.php")){
         require_once (APPPATH."libraries/nyuonci/traits/".str_replace('\\', '/', $class).".trait.php");
-    /* Classes customizadas do site */
-    }elseif (file_exists("siteclasses/classes/".str_replace('\\', '/', $class).".class.php")){
-        require_once ("siteclasses/classes/".str_replace('\\', '/', $class).".class.php");
-    /* Interfaces customizadas do site */
-    }elseif (file_exists("siteclasses/interfaces/".str_replace('\\', '/', $class).".interface.php")){
-        require_once ("siteclasses/interfaces/".str_replace('\\', '/', $class).".interface.php");
-    /* traits customizadas do site */
-    }elseif (file_exists("siteclasses/traits/".str_replace('\\', '/', $class).".trait.php")){
-        require_once ("siteclasses/traits/".str_replace('\\', '/', $class).".trait.php");
+    /* Classes customizadas */
+    }elseif (file_exists(APPPATH."libraries/nyuonci/custom/classes/".str_replace('\\', '/', $class).".class.php")){
+        require_once (APPPATH."libraries/nyuonci/custom/classes/".str_replace('\\', '/', $class).".class.php");
+    /* Interfaces customizadas */
+    }elseif (file_exists(APPPATH."libraries/nyuonci/custom/interfaces/".str_replace('\\', '/', $class).".interface.php")){
+        require_once (APPPATH."libraries/nyuonci/custom/interfaces/".str_replace('\\', '/', $class).".interface.php");
+    /* traits customizadas */
+    }elseif (file_exists(APPPATH."libraries/nyuonci/custom/traits/".str_replace('\\', '/', $class).".trait.php")){
+        require_once (APPPATH."libraries/nyuonci/custom/traits/".str_replace('\\', '/', $class).".trait.php");
+    /* Classes customizadas (sem o sufixo .class) */
+    }elseif (file_exists(APPPATH."libraries/nyuonci/custom/classes/".str_replace('\\', '/', $class).".php")){
+        require_once (APPPATH."libraries/nyuonci/custom/classes/".str_replace('\\', '/', $class).".php");
+    /* Interfaces customizadas (sem o sufixo .interface) */
+    }elseif (file_exists(APPPATH."libraries/nyuonci/custom/interfaces/".str_replace('\\', '/', $class).".php")){
+        require_once (APPPATH."libraries/nyuonci/custom/interfaces/".str_replace('\\', '/', $class).".php");
+    /* traits customizadas (sem o sufixo .trait) */
+    }elseif (file_exists(APPPATH."libraries/nyuonci/custom/traits/".str_replace('\\', '/', $class).".php")){
+        require_once (APPPATH."libraries/nyuonci/custom/traits/".str_replace('\\', '/', $class).".php");
+    }
+    if($nyu__config['autoload_models']){
+        if (file_exists(APPPATH."models/".str_replace('\\', '/', $class).".trait.php")){
+            require_once (APPPATH."models/".str_replace('\\', '/', $class).".trait.php");
+        }
     }
 }
 

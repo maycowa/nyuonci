@@ -24,14 +24,6 @@ if(file_exists(APPPATH."config/nyu-config.php")){
  */
 define('SITE_FOLDER', dirname(__DIR__));
 
-// Se o debug está ligado
-/*if(isset($nyu__debug) && $nyu__debug == true){
-    ini_set("display_errors", 1); 
-    error_reporting(1);
-}else{
-    ini_set("display_errors", 0);
-}*/
-
 /**
  * Nome do Sistema
  */
@@ -48,14 +40,6 @@ define('_SYS_VERSION_CODE_',"1.0");
  * Idioma Utilizado no sistema
  */
 define('_LANG_',"pt-br");
-/**
- * Nome do Site
- */
-define('SITE_NAME', $nyu__config['about']['site_name']);
-/**
- * Nome do Site para variáveis do sistema
- */
-define('SITE_NAME_SYS', $nyu__config['about']['site_name_sys']);
 
 $site_url_http = explode("/",$_SERVER['SERVER_PROTOCOL']);
 $tmp_get_site_url = trim(str_replace(@$_GET['get'], "", $_SERVER["REQUEST_URI"]), "/");
@@ -86,18 +70,6 @@ define("SITE_PATH", "/");
  */
 define('DS', DIRECTORY_SEPARATOR);
 /**
- * Logo do Nyu
- */
-//define('NYU_LOGO',SITE_URL."nyu/adminmedia/img/nyu-logo.png");
-///**
-// * Logo do Nyu | Admin
-// */
-//define('NYU_ADMIN_LOGO',SITE_URL."nyu/adminmedia/img/nyu-logo.png");
-///**
-// * Url da administração do Nyu
-// */
-//define('NYU_ADMIN_URL', SITE_URL.'_nyuadmin/');
-/**
  * Salt para a administração do Nyu
  */
 define('NYU_ADMIN_SALT', 'QcvOFdADzuustVSmpEn4jV1vxi9Sbxuka5Jqc4vf4XH');
@@ -125,44 +97,6 @@ define('NYU_ADMIN_SALT', 'QcvOFdADzuustVSmpEn4jV1vxi9Sbxuka5Jqc4vf4XH');
  * String padrão de comunicação do banco de dados
  */
 @define('_DB_STR_',"mysql:host="._DB_HOST_.";dbname="._DB_NAME_);
-/**
- * Indica se o sistema irá ignorar os casos de página não encontrada e irá 
- * redirecionar para a página principal
- */
-define('_IGNORE_NOT_FOUND_PAGE_', $nyu__config['misc']['ignore_not_found_page']);
-/**
- * Indica se o sistema irá fazer cache das views por padrão
- */
-define('_CACHE_VIEWS_', $nyu__config['misc']['cache_views']);
-/**
- * Definição de arquivos de erros HTTP: 401
- */
-define('_401_ERROR_FILE_', $nyu__config['misc']['401_error_file']);
-/**
- * Definição de arquivos de erros HTTP: 403
- */
-define('_403_ERROR_FILE_', $nyu__config['misc']['403_error_file']);
-/**
- * Definição de arquivos de erros HTTP: 404
- */
-define('_404_ERROR_FILE_', $nyu__config['misc']['404_error_file']);
-/**
- * Definição de arquivos de erros HTTP: 500
- */
-define('_500_ERROR_FILE_', $nyu__config['misc']['500_error_file']);
-/**
- * Definição de arquivos de erros: default
- */
-define('_DEFAULT_ERROR_FILE_', $nyu__config['misc']['default_error_file']);
-/**
- * Indica se o módulo de administração do Nyu está ativado
- */
-define('_NYU_ADMIN_', $nyu__config['misc']['nyu_admin']);
-/**
- * Registro de log: 1: Apenas transações; 2: Transações e consultas de objeto; 
- * 3: Transações, consultas de objeto e consultas simples
- */
-define('_LOG_',1);
 
 /* ini_sets necessários */
 date_default_timezone_set('America/Sao_Paulo');
