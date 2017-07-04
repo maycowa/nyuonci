@@ -1,19 +1,19 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
 /**
  * Namespace nyuxmlgen
  */
- namespace nyuxmlgen;
+ namespace Nyu\Utils\Xml;
 /**
  * Cria um Documento XML a partir de Elementos XML
  * @author Maycow Alexandre Antunes
  * @version 1.4
  */
-class XML extends Element{
+class XML extends \Nyu\Utils\Xml\Element{
     /**
-     * Versão do Documento XML
+     * VersÃ£o do Documento XML
      * @var string
      */
     protected $version;
@@ -23,18 +23,18 @@ class XML extends Element{
      */
     protected $encoding;
     /**
-     * Se true, o documento criado irá conter caracteres especiais (Enter e Tabulação)
+     * Se true, o documento criado irÃ¡ conter caracteres especiais (Enter e TabulaÃ§Ã£o)
      * @var boolean
      */
     protected $specialChars = false;
 
     /**
      * Construtor do XML. Cria um Objeto XML.
-     * @param string $version Versão do Documento XML
+     * @param string $version VersÃ£o do Documento XML
      * @param string $encoding Charset (Conjunto de Caracteres) utilizado no documento
-     * @param boolean $specialChars Se true, o documento criado irá conter caracteres 
-     * especiais (Enter e Tabulação)
-     * @param string $name Nome do documento XML - será utilizado no download do arquivo
+     * @param boolean $specialChars Se true, o documento criado irÃ¡ conter caracteres 
+     * especiais (Enter e TabulaÃ§Ã£o)
+     * @param string $name Nome do documento XML - serÃ¡ utilizado no download do arquivo
      */
     public function __construct($version = '', $encoding = '', $specialChars = false, $name = ''){
         if($version){
@@ -83,9 +83,9 @@ class XML extends Element{
     
     /**
      * Salva no servidor o documento XML gerado
-     * @param string $path Diretório onde será salvo o arquivo
+     * @param string $path DiretÃ³rio onde serÃ¡ salvo o arquivo
      * @param string $name (Opcional) Nome do documento XML
-     * @return boolean true se foi possível gravar o arquivo, false se não for possível
+     * @return boolean true se foi possÃ­vel gravar o arquivo, false se nÃ£o for possÃ­vel
      */
     public function saveXMLFile($path, $name = null){
         if($name != null){

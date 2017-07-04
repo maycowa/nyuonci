@@ -1,14 +1,15 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Utils\File;
 /**
  * Classe do Nyu para gerenciar arquivos e pastas
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @package NyuCore
  * @version 1.8.1
  */
-class NyuFileManager {
+class FileManager {
     
     /**
      * Caminho do diretório que está sendo lido
@@ -34,6 +35,7 @@ class NyuFileManager {
      * atributos $files e $folders
      */
     public function __construct($path=null, $load=true) {
+        parent::__construct();
         if ($path) {
             $this->setPath($path);
             if ($load) {
@@ -334,7 +336,7 @@ class NyuFileManager {
      */
     public function loadJsonFile($filename) {
         $s = $this->loadFile($filename);
-        return \NyuFormat::jsonFormat($s, "out");
+        return \Nyu\Utils\Format\Format::jsonFormat($s, "out");
     }
 
     /**
@@ -346,7 +348,7 @@ class NyuFileManager {
      */
     public function saveJsonFile($filename, $content) {
         $f = fopen($this->path . $filename, 'w');
-        fwrite($f, \NyuFormat::jsonFormat($content, "in"));
+        fwrite($f, \Nyu\Utils\Format\Format::jsonFormat($content, "in"));
         return fclose($f);
     }
 

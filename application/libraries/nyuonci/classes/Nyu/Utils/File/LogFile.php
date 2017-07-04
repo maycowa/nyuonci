@@ -1,9 +1,13 @@
 <?php
+/**
+ * 2017 NyuOnCI
+ */
+namespace Nyu\Utils\File;
 
 /**
  * Classe simples de log
  */
-class LogFile{
+class LogFile extends \Nyu\Core\CI{
     /**
      * Caminho da pasta em que será armazenado o log
      * @var string
@@ -45,9 +49,7 @@ class LogFile{
      * @param string $content Conteúdo a gravar
      */
     public function __construct($path = null, $filename = null, $content = null) {
-        global $CI;
-        $CI = &get_instance();
-        $CI->load->library('FileManager');
+        parent::__construct();
         
         if(isset($path)){
             $this->path = $path;
@@ -55,7 +57,7 @@ class LogFile{
             $this->path = APPPATH.'logs';
         }
         
-        $this->fm = new FileManager($this->path, false);
+        $this->fm = new \Nyu\Utils\File\FileManager($this->path, false);
         
         if(isset($filename)){
             $this->filename = $filename;

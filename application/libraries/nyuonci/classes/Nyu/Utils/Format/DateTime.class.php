@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Utils\Format;
 /**
  * Classe para tratamento simplificado de datas
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 1.0
  * @since 5.1
  */
-class NyuDateTime{
+class DateTime{
     
     /**
      * Retorna a data atual no formato informado

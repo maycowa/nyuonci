@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Classe que altera o padrão de chamada de primaryKey na classe NyuModel
  * Por padrão, a classe utiliza um campo com o mesmo nome da tabela como chave 
@@ -12,7 +13,7 @@
  * @package NyuCore
  * @version 1.0
  */
-class NyuKeyModel extends NyuModel{
+class KeyModel extends \Nyu\Core\Model{
     
     /**
      * Campo que referencia a chave do registro no banco de dados. Deve ser sobrescrito 
@@ -46,7 +47,7 @@ class NyuKeyModel extends NyuModel{
      * @param array $cols (Opcional)(Desde 4.1) Array com o mesmo formato do 
      * atributo $cols, se informado, irá buscar apenas os campos indicados 
      * neste parâmetro, senão, buscará todos os campos do atributo $cols
-     * @return boolean|\NyuModel
+     * @return boolean|\\Nyu\Core\Model
      */
     public function load($searchField = null, $cols = false) {
         if($searchField == null){

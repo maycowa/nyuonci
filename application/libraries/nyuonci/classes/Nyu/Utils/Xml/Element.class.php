@@ -1,30 +1,30 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
 /**
  * Namespace nyuxmlgen
  */
- namespace nyuxmlgen;
+ namespace Nyu\Utils\Xml;
 /**
- * Cria um Elemento XML que ir� compor um documento XML ou outros Elementos
+ * Cria um Elemento XML que irá compor um documento XML ou outros Elementos
  * @author Maycow Alexandre Antunes
  * @version 1.5
  * @package nyuxmlgen
  */
-class Element{
+class Element extends \Nyu\Core\CI{
     /**
      * Nome do Elemento
      * @var string
      */
     protected $name;
     /**
-     * Valor do Elemento (caso seja o �timo n�vel da �rvore)
+     * Valor do Elemento (caso seja o útimo nível da árvore)
      * @var string
      */
     protected $value;
     /**
-     * Array com os Elementos filhos que comp�em o Elemento
+     * Array com os Elementos filhos que compõem o Elemento
      *  @var array
      */
     protected $Elements = array();
@@ -34,22 +34,22 @@ class Element{
      */
     protected $Attributes = array();
     /**
-     * Se true, o Elemento ir� conter caracteres especiais (Enter e Tabula��o)
+     * Se true, o Elemento irá conter caracteres especiais (Enter e Tabulação)
      *  @var boolean
      */
     protected $specialChars = false;
     /**
-     * �ndice do Elemento na �rvore de elementos do Elemento Pai
+     * índice do Elemento na árvore de elementos do Elemento Pai
      * @var integer
      */
     protected $index;
     /**
-     * Se false, n�o ir� imprimir a tag se nao existir valor
+     * Se false, não irá imprimir a tag se nao existir valor
      * @var boolean
      */
     protected $printTag = true;
     /**
-     * Se true, for�a a impress�o da tag aberta (<tag></tag>)
+     * Se true, força a impressão da tag aberta (<tag></tag>)
      * se false, imprime a tag fechada (<tag/>)
      * @var boolean
      */
@@ -58,11 +58,13 @@ class Element{
     /**
      * Construtor da classe Element. Cria um Objeto Element.
      * @param string $name Nome do Elemento
-     * @param string $value Valor do Elemento (caso seja o �timo n�vel da �rvore)
-     * @param boolean $specialChars Se true, o elemento ir� conter caracteres especiais (Enter e Tabula��o)
-     * @param boolean $printTag Se false, n�o ir� imprimir a tag se nao existir valor
+     * @param string $value Valor do Elemento (caso seja o útimo nível da árvore)
+     * @param boolean $specialChars Se true, o elemento irá conter caracteres especiais (Enter e Tabulação)
+     * @param boolean $printTag Se false, não irá imprimir a tag se nao existir valor
      */
     public function __construct($name, $value= '', $specialChars = false, $printTag = true, $openTag = false){
+        parent::__construct();
+        
         $this->setName($name);
         if($value != ''){
             $this->setValue($value);
@@ -111,9 +113,9 @@ class Element{
     }
 
     /**
-     * Seta o atributo $specialChars, respons�vel por indicar se o Elemento
-     * ir� conter ou n�o caracteres especiais (Enter e Tabula��o)
-     * @param boolean $specialChars Se true, o elemento ir� conter caracteres especiais (Enter e Tabula��o)
+     * Seta o atributo $specialChars, responsável por indicar se o Elemento
+     * irá conter ou não caracteres especiais (Enter e Tabulação)
+     * @param boolean $specialChars Se true, o elemento irá conter caracteres especiais (Enter e Tabulação)
      * @return Element o objeto atual
      */
     public function setSpecialChars($specialChars){
@@ -122,17 +124,17 @@ class Element{
     }
     
     /**
-     * Retorna o valor do atributo $specialChars, respons�vel por indicar
-     * se o Elemento ir� conter ou n�o caracteres especiais (Enter e Tabula��o)
-     * @return boolean Se true, o elemento ir� conter caracteres especiais (Enter e Tabula��o)
+     * Retorna o valor do atributo $specialChars, responsável por indicar
+     * se o Elemento irá conter ou não caracteres especiais (Enter e Tabulação)
+     * @return boolean Se true, o elemento irá conter caracteres especiais (Enter e Tabulação)
      */
     public function getSpecialChars(){
         return $this->specialChars;
     }
 
     /**
-     * Seta o �ndice do Elemento na �rvore de elementos do Elemento Pai
-     * @param integer $index �ndice do Elemento na �rvore de elementos do Elemento Pai
+     * Seta o índice do Elemento na árvore de elementos do Elemento Pai
+     * @param integer $index índice do Elemento na árvore de elementos do Elemento Pai
      * @return Element o objeto atual
      */
     public function setIndex($index){
@@ -141,8 +143,8 @@ class Element{
     }
 
     /**
-     * Retorna o �ndice do Elemento na �rvore de elementos do Elemento Pai
-     * @return integer $index �ndice do Elemento na �rvore de elementos do Elemento Pai
+     * Retorna o índice do Elemento na árvore de elementos do Elemento Pai
+     * @return integer $index índice do Elemento na árvore de elementos do Elemento Pai
      */
     public function getIndex(){
         return $this->index;
@@ -150,7 +152,7 @@ class Element{
 
     /**
      * Seta o valor do atributo $printTag
-     * @param boolean $printTag Se false, n�o ir� imprimir a tag se nao existir valor
+     * @param boolean $printTag Se false, não irá imprimir a tag se nao existir valor
      * @return Element o objeto atual
      */
     public function setPrintTag($printTag){
@@ -160,7 +162,7 @@ class Element{
 
     /**
      * Retorna o valor do atributo printTag
-     * @return boolean Se false, n�o ir� imprimir a tag se nao existir valor
+     * @return boolean Se false, não irá imprimir a tag se nao existir valor
      */
     public function getPrintTag(){
         return $this->printTag;
@@ -168,7 +170,7 @@ class Element{
 
     /**
      * Seta o valor do atributo $openTag
-     * @param boolean $openTag Se true, for�a a impress�o da tag aberta (<tag></tag>)
+     * @param boolean $openTag Se true, força a impress�o da tag aberta (<tag></tag>)
      * se false, imprime a tag fechada (<tag/>)
      * @return Element o objeto atual
      */
@@ -179,7 +181,7 @@ class Element{
 
     /**
      * Retorna o valor do atributo openTag
-     * @return boolean Se true, for�a a impress�o da tag aberta (<tag></tag>)
+     * @return boolean Se true, força a impress�o da tag aberta (<tag></tag>)
      * se false, imprime a tag fechada (<tag/>)
      */
     public function getOpenTag(){
@@ -187,7 +189,7 @@ class Element{
     }
 
     /**
-     * Adiciona um elemento � arvore de Elementos do Elemento
+     * Adiciona um elemento à arvore de Elementos do Elemento
      * @param Element $Element Objeto Element a ser adicionado
      * @return Element o objeto atual
     */
@@ -198,7 +200,7 @@ class Element{
     }
 
     /**
-     * Alias para Element::addElement(). Adiciona um elemento � arvore de Elementos do Elemento
+     * Alias para Element::addElement(). Adiciona um elemento à arvore de Elementos do Elemento
      * @param Element $element Objeto Element a ser adicionado
      * @return Element o objeto atual
     */
@@ -297,16 +299,16 @@ class Element{
     }
 
     /**
-     * Retorna os Elementos pertencentes � arvore de Elementos do Elemento em quest�o
-     * @return array array com todos os objetos Element da �rvore
+     * Retorna os Elementos pertencentes à arvore de Elementos do Elemento em questão
+     * @return array array com todos os objetos Element da árvore
      */
     public function getElements(){
         return $this->Elements;    
     }
 
     /**
-     * Retorna o Elemento em formato String para que seja utilizado na constru��o do Documento XML
-     * @return string Elemento e �rvore de elementos componentes em formato String
+     * Retorna o Elemento em formato String para que seja utilizado na construção do Documento XML
+     * @return string Elemento e árvore de elementos componentes em formato String
      */
     public function toString(){
         $arg = func_get_args();
@@ -314,7 +316,7 @@ class Element{
             $this->specialChars = $arg[0];
         }
         $s = "<". $this->getName() . $this->getAttributes() . ">";
-        if($this->value != '' && count($this->Elements) == 0){ // Se possui valor e n�o possui filhos
+        if($this->value != '' && count($this->Elements) == 0){ // Se possui valor e não possui filhos
             $s .= (String)$this->getValue();
             $s .= "</" . $this->getName() . ">";
         }elseif(count($this->Elements) > 0){ // Se possui filhos
@@ -337,7 +339,7 @@ class Element{
                     }
                 }
             }
-            // Se possui filhos e valor (casos bem espec�ficos), insere o valor ap�s os filhos
+            // Se possui filhos e valor (casos bem específicos), insere o valor após os filhos
             if($this->value != ''){
                 $s .= (String)$this->getValue();
             }
@@ -358,7 +360,7 @@ class Element{
     }
 
     /**
-     * M�todo m�gico __toString
+     * Método mágico __toString
      */
     public function __toString(){
         return $this->toString();

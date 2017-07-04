@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Classe Model com paginação simples, sem filtros. Extende a classe NyuModel, 
  * herdando todos os seus métodos. Para adicionar filtros para a paginação, 
@@ -9,12 +10,12 @@
  * extendendo a NyuModel e utilizando a Trait NyuPagination.
  * @uses NyuPagination A Trait padrão responsável por tratar da paginação
  */
-class NyuSimplePaginationModel extends NyuModel{
+class SimplePaginationModel extends \Nyu\Core\Model{
     /**
      * Chama a Trait NyuPagination, responsável por montar o array com os 
      * índices para construir os links de paginação
      */
-    use NyuPagination;
+    use \Nyu\Core\Pagination;
     /**
      * Método que retorna a collection de objetos que será utilizada na página
      * 

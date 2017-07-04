@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Database;
 /**
  * Classe para criar consultas sql
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 1.0
  * @since 4.0
  */
-class NyuQueryBuilder{
+class QueryBuilder extends \Nyu\Core\CI{
 
     /**
      * Campos a buscar/combinação de campos a buscar
@@ -60,9 +61,16 @@ class NyuQueryBuilder{
     protected $limit = array();
     
     /**
+     * Construtor da classe
+     */
+    public function __construct() {
+        parent::__construct();
+    }
+    
+    /**
      * Adiciona um campo na consulta
      * @param string $field Campo a adicionar na consulta
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function addField($field){
         $this->fields[] = $field;
@@ -72,7 +80,7 @@ class NyuQueryBuilder{
     /**
      * Atribui todos os campos da consulta
      * @param array $fields array com os campos a buscar na consulta
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function setFields($fields){
         $this->fields = $fields;
@@ -82,7 +90,7 @@ class NyuQueryBuilder{
     /**
      * Atribui a tabela a qual será feita a consulta
      * @param string $table Tabela a ser feita a consulta
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function setTable($table){
         $this->table = $table;
@@ -94,7 +102,7 @@ class NyuQueryBuilder{
      * @param string $table Tabela
      * @param string $condition Condição
      * @param string $type Tipo da junção (inner/left/right)
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function addJoin($table, $condition, $type=false){
         $join = array("table" => $table, 
@@ -109,7 +117,7 @@ class NyuQueryBuilder{
      * Adiciona uma condição à consulta
      * @param string $condition Condição
      * @param string $operator Operador (and/or)
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function addWhere($condition, $operator=false){
         $where = array("condition" => $condition, "operator" => $operator);
@@ -120,7 +128,7 @@ class NyuQueryBuilder{
     /**
      * Adiciona um campo na ordenação da consulta
      * @param string $order Campo a adicionar
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function addOrder($order){
         $this->order[] = $order;
@@ -130,7 +138,7 @@ class NyuQueryBuilder{
     /**
      * Atribui todos os campos da ordenação da consulta
      * @param array $order array com os campos a ordenar
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function setOrder($order){
         $this->order = $order;
@@ -140,7 +148,7 @@ class NyuQueryBuilder{
     /**
      * Adiciona um campo no agrupamento da consulta
      * @param string $group Campo a adicionar
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function addGroup($group){
         $this->group[] = $group;
@@ -150,7 +158,7 @@ class NyuQueryBuilder{
     /**
      * Atribui todos os campos do agrupamento da consulta
      * @param array $group array com os campos a agrupar
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function setGroup($group){
         $this->group = $group;
@@ -161,7 +169,7 @@ class NyuQueryBuilder{
      * Atribui os valores de limite para uma consulta - utilizado em MySQL
      * @param int $limit1 Primeiro valor do limite
      * @param int $limit2 Segundo valor do limite
-     * @return NyuQueryBuilder O objeto atual
+     * @return \Nyu\Database\QueryBuilder O objeto atual
      */
     public function setLimit($limit1, $limit2=null){
         $this->limit = array($limit1, $limit2);

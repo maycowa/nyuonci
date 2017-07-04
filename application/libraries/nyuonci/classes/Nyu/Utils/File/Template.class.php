@@ -1,14 +1,15 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Utils\File;
 /**
  * Classe que trata dos templates do sistema utilizando a template engine Twig
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @package NyuCore
  * @version 1.8
  */
-class NyuTemplate{
+class Template extends \Nyu\Core\CI{
     /**
      * Loader das classes do Twig
      * @var Twig_Loader_Filesystem
@@ -39,8 +40,10 @@ class NyuTemplate{
     public function __construct($options=null) {
         global $MVCModulePath;
         
+        parent::__construct();
+        
         if(is_null($options['cache']) && (_CACHE_VIEWS_ == 1 || $options['force_cache'] == 1)){ // Seta a pasta de cache de templates
-            $options['cache'] = SITE_FOLDER.NyuConfig::getConfig('mvc', 'cache_path');
+            $options['cache'] = SITE_FOLDER.\Nyu\Core\Config::getConfig('mvc', 'cache_path');
         }else{
             $options['cache'] = false;
         }
@@ -50,22 +53,22 @@ class NyuTemplate{
             /*if($MVCModulePath){
                 $options['template_dir'] = SITE_FOLDER.'/mvc/modules/'.$MVCModulePath.'/view';
             }else{*/
-                $options['template_dir'] = SITE_FOLDER.NyuConfig::getConfig('mvc', 'views_path');
+                $options['template_dir'] = SITE_FOLDER.\Nyu\Core\Config::getConfig('mvc', 'views_path');
             /*}*/
         }
         $template_dir = $options['template_dir'];
         unset($options['template_dir']);
 
         //Carrega a engine do Twig
-        if(file_exists(SITE_FOLDER.'/'.NyuConfig::getConfig("lib_folder").'/Twig/Autoloader.php')){
-            require_once(SITE_FOLDER.'/'.NyuConfig::getConfig("lib_folder").'/Twig/Autoloader.php');
+        if(file_exists(SITE_FOLDER.'/'.\Nyu\Core\Config::getConfig("lib_folder").'/Twig/Autoloader.php')){
+            require_once(SITE_FOLDER.'/'.\Nyu\Core\Config::getConfig("lib_folder").'/Twig/Autoloader.php');
         }else{
             throw new Exception("Twig não está incluído nesta instalação do ". _SYS_NAME_);
         }
         
-        Twig_Autoloader::register();
-        $this->loader = new Twig_Loader_Filesystem($template_dir);
-        $this->twig = new Twig_Environment($this->loader, $options);
+        \Twig_Autoloader::register();
+        $this->loader = new \Twig_Loader_Filesystem($template_dir);
+        $this->twig = new \Twig_Environment($this->loader, $options);
         
         /* Adiciona constantes do sistema que podem ser utilizadas no template */
         $this->addVar("_SYS_NAME_", _SYS_NAME_);
@@ -80,7 +83,7 @@ class NyuTemplate{
         $this->addVar("NYU_ADMIN_URL", NYU_ADMIN_URL);
         
         /* Adiciona classes globais para executar métodos úteis */
-        $this->twig->addGlobal('NYUCORE', new NyuCore());
+        $this->twig->addGlobal('NYUCORE', new \Nyu\Core\Core());
         $this->twig->addGlobal('NYUDATETIME', new NyuDateTime());
     }
     

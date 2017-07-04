@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Database;
 /**
  * Classe de conexão à banco de dados do Nyu
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 6.1.2
  * @uses PDO
  */
-class NyuDb {
+class Db extends \Nyu\Core\CI{
     /**
      * Objeto de conexão PDO utilizado para as operações em banco de dados
      * @var PDO
@@ -25,7 +26,7 @@ class NyuDb {
     
     /**
      * Objeto NyuDb utilizado para criar apenas uma conexão de banco de dados
-     * @var NyuDb
+     * @var \Nyu\Database\Db
      */
     protected static $instance;
     
@@ -37,7 +38,7 @@ class NyuDb {
  
     /**
      * Método singleton da classe NyuDb
-     * @return NyuDb
+     * @return \Nyu\Database\Db
      */
     public static function getInstance(){
         if(!self::$instance){
@@ -71,16 +72,17 @@ class NyuDb {
     }
 
     /**
-     * Método construtor da classe NyuDb
+     * Método construtor da classe Db
      */
     public function __construct() {
+        parent::__construct();
         $this->start();
     }
     
     /**
      * Inicia a transação
      * Para carregar uma nova configuração de banco de dados, antes de utilizar
-     * os métodos de acesso a banco de dados da classe NyuModel, chamar o método
+     * os métodos de acesso a banco de dados da classe Model, chamar o método
      * NyuCore::setDatabaseConfig() para alterar a configuração
      */
     public function start() {
@@ -95,7 +97,7 @@ class NyuDb {
         }
         
         // Carrega as configurações de banco de dados
-        $database_config = \NyuConfig::getConfig('database', $database_config_name);
+        $database_config = \Nyu\Core\Config::getConfig('database', $database_config_name);
         
         // Se é mysql ou não especificou, carrega no padrão mysql
         if($database_config['driver'] == 'mysql' || !$database_config['driver']){
@@ -159,8 +161,8 @@ class NyuDb {
     }
     
     /**
-     * Faz commit da transação atual, dentro do processamento da classe NyuModel
-     * Para forçar o commit manualmente, utilizar o método NyuDb::commit();
+     * Faz commit da transação atual, dentro do processamento da classe Model
+     * Para forçar o commit manualmente, utilizar o método Db::commit();
      */
     public function _nyuModelCommit(){
         if(!$this->manualCommitActive){
@@ -184,12 +186,12 @@ class NyuDb {
 
     /**
      * Método estático que ativa a transação manual
-     * Aguarda a chamada do método NyuDb::dbCommit() para persistir a operação
+     * Aguarda a chamada do método Db::dbCommit() para persistir a operação
      * @since 6.0
      */
     public static function dbTransaction(){
         $db = self::getInstance(); // Carrega a instância já existente do objeto
-        $db->manualCommit(); // Força o commit manual, para que o controle não seja feito automaticamente dentro da NyuModel
+        $db->manualCommit(); // Força o commit manual, para que o controle não seja feito automaticamente dentro da Model
         $db->beginTransaction(); // Inicia uma nova transação, se já não estiver em uma
     }
     
@@ -260,7 +262,7 @@ class NyuDb {
         if ($ret) {
             if(!$obj->$getPk()){ // se não possui id, atualiza o objeto
                 $id = $this->con->lastInsertId();
-                \NyuCore::saveInSess("lastInsertId", $id);
+                \Nyu\Core\Core::saveInSess("lastInsertId", $id);
                 $obj->$setPk((($id) ? $id : $pk_value));
             }
             return true;

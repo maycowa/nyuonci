@@ -1,11 +1,12 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Exception;
 /**
  * Classe para tratar excessões nas regras de negócio de objetos
  * @package NyuCore
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @since 6.0
  */
-class NyuBusinessException extends NyuException{}
+class BusinessException extends NyuException{}

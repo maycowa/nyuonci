@@ -1,15 +1,15 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
-
+namespace Nyu\Core;
 /**
  * Métodos do core do Nyu
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @package NyuCore
  * @version 2.0
  */
-class NyuCore {
+class Core{
 
     /**
      * Salva uma variável na sessão do sistema
@@ -90,7 +90,7 @@ class NyuCore {
             $databaseConfig = "default";
         }
         $nyu__database_config = $databaseConfig;
-        NyuDb::resetInstance(); // Reinicia o Singleton do objeto de bd
+        \Nyu\Database\Db::resetInstance(); // Reinicia o Singleton do objeto de bd
     }
     
     /**
@@ -169,13 +169,13 @@ class NyuCore {
      */
     public static function prepareEditor($toolbar = null) {
         if (!class_exists("CKEditor")) {
-            if (file_exists(SITE_FOLDER . "/" . NyuConfig::getConfig("lib_folder"). "/ckeditor/ckeditor.php")) {
-                include_once(SITE_FOLDER . "/" . NyuConfig::getConfig("lib_folder"). "/ckeditor/ckeditor.php");
+            if (file_exists(SITE_FOLDER . "/" . Nyu\Core\Config::getConfig("lib_folder"). "/ckeditor/ckeditor.php")) {
+                include_once(SITE_FOLDER . "/" . Nyu\Core\Config::getConfig("lib_folder"). "/ckeditor/ckeditor.php");
             } else {
                 throw new Exception("CKEditor não está incluído nesta instalação do " . _SYS_NAME_);
             }
         }
-        $CKEditor = new CKEditor(SITE_URL . "/" . NyuConfig::getConfig("lib_folder"). '/ckeditor/');
+        $CKEditor = new CKEditor(SITE_URL . "/" . Nyu\Core\Config::getConfig("lib_folder"). '/ckeditor/');
         $CKEditor->config["extraPlugins"] = 'tableresize';
         if ($toolbar) {
             $CKEditor->config["toolbar"] = $toolbar;
@@ -277,11 +277,11 @@ class NyuCore {
      */
     public static function verifyChars($var, $qtdeChars, $mode) {
         if ($mode == "MIN") {
-            return NyuCore::minChars($var, $qtdeChars);
+            return \Nyu\Core\Core::minChars($var, $qtdeChars);
         } elseif ($mode == "MAX") {
-            return NyuCore::maxChars($var, $qtdeChars);
+            return \Nyu\Core\Core::maxChars($var, $qtdeChars);
         } elseif ($mode == "EXACT") {
-            return NyuCore::exactChars($var, $qtdeChars);
+            return \Nyu\Core\Core::exactChars($var, $qtdeChars);
         }
     }
 
@@ -406,7 +406,7 @@ class NyuCore {
         echo "</table>";
         echo "<h3 class='h3_about'>Libs Instaladas:";
         echo "<table class='table_about'>";
-        $fm = new NyuFileManager(SITE_FOLDER . "/" . NyuConfig::getConfig("lib_folder"));
+        $fm = new \Nyu\Utils\File\FileManager(SITE_FOLDER . "/" . Nyu\Core\Config::getConfig("lib_folder"));
         foreach ($fm->getFolders() as $f) {
             if ($f != "..") {
                 echo "<tr><td>" . $f . "</td></tr>";
@@ -430,7 +430,7 @@ class NyuCore {
         $vars['_title'] = $title;
         $vars['_link_home_'] = SITE_URL;
         $base_template = "offline_content";
-        $tpl = new NyuTemplate(array('template_dir' => SITE_FOLDER.'/nyu/adminmvc/views'));
+        $tpl = new \Nyu\Utils\File\Template(array('template_dir' => SITE_FOLDER.'/nyu/adminmvc/views'));
         $tpl->renderTemplate("{$base_template}.twig", $vars);
     }
 

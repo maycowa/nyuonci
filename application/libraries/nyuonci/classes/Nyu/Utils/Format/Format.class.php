@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Utils\Format;
 /**
  * Classe de formatação de dados do Nyu
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 1.3.1
  **/
 
-class NyuFormat {
+class Format{
     
     /**
      * Formata data vinda no padrão mysql para o padrão brasileiro
@@ -67,11 +68,11 @@ class NyuFormat {
      */
     public static function jsonFormat($var, $in_out) {
         if (strtoupper($in_out) == "IN") {
-            $var = NyuFormat::jsonFormatIn($var);
+            $var = \Nyu\Utils\Format\Format::jsonFormatIn($var);
             return json_encode($var);
         } else {
             $var = json_decode($var, true);
-            return NyuFormat::jsonFormatOut($var);
+            return \Nyu\Utils\Format\Format::jsonFormatOut($var);
         }
     }
 

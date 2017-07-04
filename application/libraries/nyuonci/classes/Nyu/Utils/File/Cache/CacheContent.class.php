@@ -1,15 +1,15 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
-namespace nyu\utils\cache;
+namespace Nyu\Utils\File\Cache;
 /**
  * Classe do Nyu para gerenciar arquivos de cache
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @package nyu\utils\cache
  * @version 1.0
  */
-class CacheContent {
+class CacheContent extends \Nyu\Core\CI{
     /**
      * Conteúdo que será salvo em cache
      * @var string
@@ -36,8 +36,9 @@ class CacheContent {
      * @param string $folder Pasta em que serão salvos os arquivos de cache
      */
     function __construct($folder = null) {
+        parent::__construct();
         $this->folder = SITE_FOLDER."/".$folder;
-        $this->fm = new NyuFileManager($this->folder);
+        $this->fm = new \Nyu\Utils\File\FileManager($this->folder);
     }
    
     /**

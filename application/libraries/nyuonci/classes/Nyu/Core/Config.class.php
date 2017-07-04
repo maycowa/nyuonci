@@ -1,7 +1,8 @@
 <?php
 /**
- * 2014 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Classe para carregar as configurações do nyu
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 1.0.1
  * @since 5.0
  */
-class NyuConfig {
+class Config extends \Nyu\Core\CI{
     
     /**
      * Retorna uma configuração salva no arquivo config.php

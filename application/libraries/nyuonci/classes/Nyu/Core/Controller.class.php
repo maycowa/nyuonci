@@ -1,14 +1,15 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Classe que trata as Controllers do Nyu MVC
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @package NyuMVC
  * @version 1.3
  */
-class NyuController{
+class Controller extends \CI_Controller{
     
     /**
      * Nome da classe que serão buscados os métodos de Controller

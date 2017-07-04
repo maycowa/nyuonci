@@ -1,11 +1,12 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Trait Responsável por criar a estrutura de paginação
  */
-trait NyuPagination{
+trait Pagination{
     
     /**
      * Método abstrato que retorna a collection de objetos que será utilizada na página

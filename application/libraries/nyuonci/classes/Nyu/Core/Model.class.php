@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Definição de classes do Nyu.
  * As classes que irão acessar banco de dados devem extender esta classe,
@@ -11,7 +12,7 @@
  * @package NyuCore
  * @version 2.2.1
  */
-class NyuModel {
+class Model extends \CI_Model{
 
     /**
      * Tabela do banco de dados que o objeto referencia. Deve ser sobrescrito 
@@ -35,6 +36,13 @@ class NyuModel {
     public $databaseConfig;
     
     /**
+     * Construtor da classe
+     */
+    public function __construct() {
+        parent::__construct();
+    }
+    
+    /**
      * Seta o valor do atributo $databaseConfig, responsável por carregar
      * a configuração do banco de dados para instâncias diferentes da padrão
      * do sistema
@@ -42,7 +50,7 @@ class NyuModel {
      */
     public function setDatabaseConfig($databaseConfig){
         $this->databaseConfig = $databaseConfig;
-        \NyuCore::setDatabaseConfig($this->databaseConfig);
+        \Nyu\Core\Core::setDatabaseConfig($this->databaseConfig);
     }
 
     /**
@@ -59,7 +67,7 @@ class NyuModel {
         if (!$cols) {
             $cols = $this->getCols();
         }
-        $db = \NyuDb::getInstance();
+        $db = \Nyu\Database\Db::getInstance();
         $db->beginTransaction(); // Inicia uma transação se já não iniciou
         try {
             $this->triggerBeforeSave();
@@ -75,15 +83,15 @@ class NyuModel {
                 return false;
             }
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \\Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \\Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \\Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         }
@@ -97,7 +105,7 @@ class NyuModel {
      * @return boolean
      */
     public function delete($searchField = null) {
-        $db = \NyuDb::getInstance();
+        $db = \Nyu\Database\Db::getInstance();
         $db->beginTransaction(); // Inicia uma transação se já não iniciou
         try {
             $searchField = (($searchField) ? $searchField : $this->getTable());
@@ -118,15 +126,15 @@ class NyuModel {
                 return false;
             }
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         }
@@ -140,24 +148,24 @@ class NyuModel {
      * @param array $cols (Opcional)(Desde 4.1) Array com o mesmo formato do 
      * atributo $cols, se informado, irá buscar apenas os campos indicados 
      * neste parâmetro, senão, buscará todos os campos do atributo $cols
-     * @return boolean|\NyuModel
+     * @return boolean|\\Nyu\Core\Model
      */
     public function load($searchField = null, $cols = false) {
         try {
-            $db = \NyuDb::getInstance();
+            $db = \Nyu\Database\Db::getInstance();
             $class = get_called_class();
             $this->triggerBeforeLoad();
             $db->load($this, $class::getTable(), ($cols ? $cols : $class::getCols()), $searchField);
             $this->triggerAfterLoad();
             return $this;
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         }
     }
@@ -181,17 +189,17 @@ class NyuModel {
      */
     public static function listAll($orderBy = null, $where = null, $cols = false, $iniReg = null, $limit = null) {
         try {
-            $db = \NyuDb::getInstance();
+            $db = \Nyu\Database\Db::getInstance();
             $class = get_called_class();
             return $db->listAll(new $class(), $class::getTable(), ($cols ? $cols : $class::getCols()), $orderBy, $where, $iniReg, $limit);
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         }
     }
@@ -212,17 +220,17 @@ class NyuModel {
     public static function listByKey($key, $searchField = null, $order = null, $where = null, $cols = false) {
         try {
             
-            $db = \NyuDb::getInstance();
+            $db = \Nyu\Database\Db::getInstance();
             $class = get_called_class();
             return $db->listByKey(new $class(), $class::getTable(), ($cols ? $cols : $class::getCols()), $key, $searchField, $order, $where);
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         }
     }
@@ -252,18 +260,18 @@ class NyuModel {
      */
     public static function count($key = null, $searchField = null){
         try {
-            $db = \NyuDb::getInstance();
+            $db = \Nyu\Database\Db::getInstance();
             $class = get_called_class();
             $c = $db->count($class::getTable(), $key, $searchField);
             return $c;
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         }
     }
@@ -276,17 +284,17 @@ class NyuModel {
      */
     public static function query($sql, $bind=null) {
         try {
-            $db = \NyuDb::getInstance();
+            $db = \Nyu\Database\Db::getInstance();
             $c = $db->query($sql, $bind);
             return $c;
         } catch (\PDOException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\MysqlException $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         } catch (\Exception $e) {
-            \NyuCore::setException($e);
+            \Nyu\Core\Core::setException($e);
             return false;
         }
     }
@@ -385,12 +393,12 @@ class NyuModel {
      */
     public function getObject($attribute, $class, $keyname = null, $fieldname = null, $module = null, $databaseconfig = null){
         if($module){
-            $moduleTmp = \NyuCore::getModule();
-            \NyuCore::setModule($module);
+            $moduleTmp = \Nyu\Core\Core::getModule();
+            \Nyu\Core\Core::setModule($module);
         }
         if($databaseconfig){
-            $databaseconfigTmp = \NyuCore::getDatabaseConfig();
-            \NyuCore::setDatabaseConfig($databaseconfig);
+            $databaseconfigTmp = \Nyu\Core\Core::getDatabaseConfig();
+            \Nyu\Core\Core::setDatabaseConfig($databaseconfig);
         }
         $obj = new $class();
         $class = str_replace("Model", "", $class);
@@ -402,10 +410,10 @@ class NyuModel {
         $obj->load($fieldname);
         //echo "<br>";
         if($moduleTmp){
-            \NyuCore::setModule($moduleTmp);
+            \Nyu\Core\Core::setModule($moduleTmp);
         }
         if(isset($databaseconfig)){
-            \NyuCore::setDatabaseConfig($databaseconfigTmp);
+            \Nyu\Core\Core::setDatabaseConfig($databaseconfigTmp);
         }
         
         return $obj;

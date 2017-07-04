@@ -1,11 +1,12 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Exception;
 /**
  * Classe para tratar excessões na geração de Querys
  * @package NyuCore
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @since 4.0
  */
-class NyuQueryBuilderException extends NyuException{}
+class QueryBuilderException extends \Nyu\Exception\Exception{}

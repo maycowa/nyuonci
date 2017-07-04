@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Validate;
 /**
  * Classe de regras de validação de objetos
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 1.1.1
  * @since 5.0
  */
-class NyuValidateRule {
+class ValidateRule {
     
     /**
      * Atributo a validar

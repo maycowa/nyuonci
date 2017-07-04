@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Core;
 /**
  * Classe base para regras de Negócio e validação do objeto.
  * As classes devem extender essa classe para utilizar suas funcionalidades
@@ -9,10 +10,10 @@
  * @package NyuCore
  * @version 0.1
  * @since 6.0
- * @uses NyuValidate
- * @uses NyuValidateRule
+ * @uses Nyu\Utils\Validate
+ * @uses Nyu\Utils\ValidateRule
  */
-class NyuBusiness{
+class Business extends \Nyu\Core\CI{
     
     /**
      * Regras de validação do objeto
@@ -47,6 +48,8 @@ class NyuBusiness{
      * das triggers
      */
     public function __construct($object = null, $rules = null, $controller = null) {
+        parent::__construct();
+
         // Se foi informado um objeto
         if(isset($object) && $object != null){
             $this->setObject($object);
@@ -136,11 +139,11 @@ class NyuBusiness{
                 $this->setRules($this->rules); // Formata as regras
             }
             $this->triggerBeforeValidate(); // Executa um código antes de validar
-            $val = new NyuValidate($this->object, $this->rules); // Cria o objeto de validação
+            $val = new \Nyu\Utils\Validate\Validate($this->object, $this->rules); // Cria o objeto de validação
             $val->validate(); // Valida o objeto
             if(!$val->isValid()){ // Se não está válido
                 $this->triggerAfterValidateFail(); // Executa um processamento após a validação com falha
-                throw new NyuBusinessException($val->getMessage(), 99); // Retorna a mensagem de erro em uma Excessão
+                throw new \Nyu\Exception\BusinessException($val->getMessage(), 99); // Retorna a mensagem de erro em uma Excessão
                 return false; // Retorna falha
             }
             $this->triggerAfterValidateSuccess(); // Executa um processamento após a validação com sucesso
@@ -161,8 +164,8 @@ class NyuBusiness{
                     return true;
                 }else{
                     $this->triggerAfterSaveFail(); // Trigger após o processamento com falha
-                    $message = \NyuCore::getException(); // Pega a exceção gerada na NyuModel
-                    throw new NyuBusinessException($message, 99); // Retorna a mensagem de erro em uma Excessão
+                    $message = \Nyu\Core\Core::getException(); // Pega a exceção gerada na NyuModel
+                    throw new \Nyu\Exception\BusinessException($message, 99); // Retorna a mensagem de erro em uma Excessão
                     return false;
                 }
             }
@@ -217,7 +220,7 @@ class NyuBusiness{
             if(is_a($rule, "\NyuValidateRule")){
                 $this->rules[] = $rule;
             }else{
-                throw new NyuBusinessException(NYU_BUSINESS_EXCEPTION_00, 00);
+                throw new \Nyu\Exception\BusinessException(NYU_BUSINESS_EXCEPTION_00, 00);
             }
         }elseif(is_array($rule)){ // Senão, se é um array
             
@@ -268,11 +271,11 @@ class NyuBusiness{
             }
             
             // Cria o objeto de regra de validação
-            $vr = new NyuValidateRule($rule['attr'], $nyuRule, $ruleValue, $message, $fieldName);
+            $vr = new \Nyu\Utils\Validate\ValidateRule($rule['attr'], $nyuRule, $ruleValue, $message, $fieldName);
             $this->rules[] = $vr; // Adiciona no array a regra
         }else{
             // Se não é uma regra, gera uma exceção
-            throw new NyuBusinessException(NYU_BUSINESS_EXCEPTION_00, 00);
+            throw new \Nyu\Exception\BusinessException(NYU_BUSINESS_EXCEPTION_00, 00);
         }
     }
 }

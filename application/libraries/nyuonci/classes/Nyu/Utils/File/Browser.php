@@ -1,4 +1,8 @@
 <?php
+/**
+ * 2017 NyuOnCI
+ */
+namespace Nyu\Utils\File;
 
 /**
  * File: Browser.php

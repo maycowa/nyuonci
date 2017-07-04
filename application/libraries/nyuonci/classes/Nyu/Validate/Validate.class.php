@@ -1,7 +1,8 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Validate;
 /**
  * Classe de validação de objetos
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
@@ -9,7 +10,7 @@
  * @version 1.0.1
  * @since 5.0
  */
-class NyuValidate{
+class Validate{
     /**
      * Regras a utilizar na validação
      * @var array
@@ -53,7 +54,7 @@ class NyuValidate{
     /**
      * Seta o objeto a validar
      * @param object $object
-     * @return NyuValidate O objeto atual
+     * @return \Nyu\Validate\Validate O objeto atual
      */
     public function setObject($object){
         $this->object = $object;
@@ -63,7 +64,7 @@ class NyuValidate{
     /**
      * Adiciona uma regra a ser utilizada para a validação
      * @param NyuValidateRule $rule Objeto da regra a utilizar
-     * @return NyuValidate O objeto atual
+     * @return \Nyu\Validate\Validate O objeto atual
      */
     public function addRule($rule){
         $this->rules[] = $rule;
@@ -93,7 +94,7 @@ class NyuValidate{
                 $rule = str_replace('$b', "'".$b."'", $rule);
                 try{
                     $this->valid = eval($rule);
-                }catch(NyuValidateException $e){
+                }catch(\Nyu\Exception\ValidateException $e){
                     $this->message = $e->getMessage();
                     $this->valid = false;
                     continue;

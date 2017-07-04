@@ -1,14 +1,15 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Utils\File\Cache;
 /**
  * Controller padrão para tratar views cacheadas
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  * @package NyuCore
  * @version 1.0
  */
-class NyuCachedController extends NyuController{
+class CachedController extends \Nyu\Core\Controller{
     protected $prefix;
     protected $template;
     protected $cache;
@@ -16,7 +17,7 @@ class NyuCachedController extends NyuController{
     public function __construct() {
         parent::__construct();
         $this->template = new NyuTemplate();
-        $this->cache = new NyuCacheContent(NyuConfig::getConfig("mvc", "cache_path"));
+        $this->cache = new NyuCacheContent(\Nyu\Core\Config::getConfig("mvc", "cache_path"));
     }
     
     /**

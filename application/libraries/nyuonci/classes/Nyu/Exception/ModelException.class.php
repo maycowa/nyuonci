@@ -1,11 +1,11 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Exception;
 /**
  * Classe para tratar excessões na validação de objetos
  * @package NyuCore
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
- * @since 4.0
  */
-class NyuValidateException extends NyuException{}
+class ModelException extends \Nyu\Exception\Exception{}

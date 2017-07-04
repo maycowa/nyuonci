@@ -1,10 +1,11 @@
 <?php
 /**
- * 2016 Nyu Framework
+ * 2017 NyuOnCI
  */
+namespace Nyu\Exception;
 /**
  * Classe para tratar excessões personalizadas
  * @package NyuCore
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  */
-class NyuException extends Exception {}
+class Exception extends Exception {}
