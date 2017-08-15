@@ -28,7 +28,7 @@ class Core{
      * @return mixed
      */
     public static function loadFromSess($name, $delete = true) {
-        $sess = unserialize($_SESSION[SITE_NAME_SYS][$name]);
+        $sess = @unserialize($_SESSION[SITE_NAME_SYS][$name]);
         if ($delete) {
             unset($_SESSION[SITE_NAME_SYS][$name]);
         }

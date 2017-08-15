@@ -83,15 +83,15 @@ class Model extends \CI_Model{
                 return false;
             }
         } catch (\PDOException $e) {
-            \\Nyu\Core\Core::setException($e);
+            \Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         } catch (\MysqlException $e) {
-            \\Nyu\Core\Core::setException($e);
+            \Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         } catch (\Exception $e) {
-            \\Nyu\Core\Core::setException($e);
+            \Nyu\Core\Core::setException($e);
             $db->rollback();
             return false;
         }

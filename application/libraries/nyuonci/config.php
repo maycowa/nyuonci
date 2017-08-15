@@ -28,6 +28,11 @@ define('SITE_FOLDER', dirname(__DIR__));
  * Nome do Sistema
  */
 define('_SYS_NAME_',"Nyu on CodeIgniter");
+
+/**
+ * Para sessão interna do sistema
+ */
+define('SITE_NAME_SYS',"NyuOnCI");
 /**
  * Descrição da Versão do Sistema
  */
@@ -103,7 +108,7 @@ date_default_timezone_set('America/Sao_Paulo');
 ini_set("session.gc_maxlifetime", 3600 * 12);
 ini_set("max_execution_time", 600);
 ini_set("memory_limit", "256M");
-ini_set("session.name", 'sess_'.SITE_NAME_SYS);
+//ini_set("session.name", 'sess_'.SITE_NAME_SYS);
 ini_set("default_charset", 'utf-8');
 ini_set('post_max_size', '200M');
 ini_set('upload_max_filesize', '200M');

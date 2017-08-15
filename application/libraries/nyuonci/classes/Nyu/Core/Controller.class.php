@@ -42,15 +42,29 @@ class Controller extends \CI_Controller{
     public $files;
     
     /**
-     * Construtor da classe NyuController
+     * Construtor da classe Nyu\Core\Controller
      * @uses $GET Parâmetros enviados via GET através da URL amigável
      */
     public function __construct() {
+        // Construtor da controller do CodeIgniter
+        parent::__construct();
+        
+        // Compatibilidade com variáveis do Nyu
         global $GET;
         $this->get = $GET;
         $this->post = $_POST;
         $this->files = $_FILES;
         $this->queryStrGet = $_GET;
+        
+        // Helper que trata da URL
+        $this->load->helper('url');
+        
+        // Adiciona a função que trata da URL automaticamente no template
+        $config = [
+                'functions' => ['base_url']
+        ];
+        // Carrega a biblioteca de templates
+        $this->load->library('twig');
     }
     
     /**

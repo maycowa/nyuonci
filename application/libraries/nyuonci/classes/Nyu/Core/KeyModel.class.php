@@ -77,7 +77,7 @@ class KeyModel extends \Nyu\Core\Model{
      * utilizado na busca
      * @return boolean
      */
-    public function count($key = null, $searchField = null) {
+    public static function count($key = null, $searchField = null) {
         if($searchField == null){
             $searchField = static::$primaryKey;
         }

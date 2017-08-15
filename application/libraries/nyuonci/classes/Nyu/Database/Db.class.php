@@ -90,7 +90,8 @@ class Db extends \Nyu\Core\CI{
      * Carrega a condiguração do banco de dados
      */
     protected function __connect($config = 'default'){
-        return $this->CI->load->database($config);
+        $this->CI->load->database($config);
+        return $this->CI->db;
     }
     
     /**
@@ -110,7 +111,7 @@ class Db extends \Nyu\Core\CI{
             $database_config_name = $nyu__database_config;
         }
         
-        $this->con = __connect($database_config_name);
+        $this->con = $this->__connect($database_config_name);
         
         // Inicia uma transação
         $this->beginTransaction();
@@ -330,7 +331,7 @@ class Db extends \Nyu\Core\CI{
     public function listAll($defClass, $table, $fields, $order=null, $where=null, $iniReg = null, $limit = null) {
         foreach ($fields as $var => $col) {
             $cols[] = $col;
-            $method = "set{$var}";
+            $method = "set".ucfirst($var);
             $methods[$col] = $method;
         }
 
@@ -350,6 +351,9 @@ class Db extends \Nyu\Core\CI{
             $sql .= " limit {$limit}";
         }
         
+        if(empty($bindWhere))
+            $bindWhere = [];
+        
         $res = $this->con->query($sql, $bindWhere);
         
         self::setLastQuery($sql);
@@ -362,7 +366,8 @@ class Db extends \Nyu\Core\CI{
             foreach ($ret as $val) {
                 $o = new $class();
                 foreach ($cols as $col) {
-                    $o->$methods[$col]($val[$col]);
+                    $getMethod = $methods[$col];
+                    $o->$getMethod($val[$col]);
                 }
                 $l[] = $o;
             }
@@ -433,7 +438,8 @@ class Db extends \Nyu\Core\CI{
             foreach ($ret as $val) {
                 //$obj = new $class();
                 foreach ($cols as $col) {
-                    $obj->$methods[$col]($val[$col]);
+                    $setMethod = $methods[$col];
+                    $obj->$setMethod($val[$col]);
                 }
             }
             return $obj;

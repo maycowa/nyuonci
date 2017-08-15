@@ -22,7 +22,6 @@ class CI{
      */
     public function __construct() {
         global $CI;
-        $CI &= get_instance();
         $this->CI = $CI;
     }
 }
