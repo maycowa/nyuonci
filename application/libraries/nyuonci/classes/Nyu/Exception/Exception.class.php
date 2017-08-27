@@ -8,4 +8,4 @@ namespace Nyu\Exception;
  * @package NyuCore
  * @author Maycow Alexandre Antunes <maycow@maycow.com.br>
  */
-class Exception extends Exception {}
+class Exception extends \Exception {}

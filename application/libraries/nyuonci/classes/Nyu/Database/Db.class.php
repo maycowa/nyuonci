@@ -336,7 +336,7 @@ class Db extends \Nyu\Core\CI{
         }
 
         $class = ((is_object($defClass)) ? get_class($defClass) : $defClass);
-        
+
         if(is_array($where)){
             $bindWhere = array_values($where);
             $where = array_keys($where);
@@ -487,7 +487,8 @@ class Db extends \Nyu\Core\CI{
             foreach ($ret as $val) {
                 $o = new $class();
                 foreach ($cols as $col) {
-                    $o->$methods[$col]($val[$col]);
+                    $setMethod = $methods[$col];
+                    $o->$setMethod($val[$col]);
                 }
                 $l[] = $o;
             }
@@ -563,8 +564,8 @@ class Db extends \Nyu\Core\CI{
         if (!$res) {
             return false;
         }
-        if ($ret) {
-            return $ret;
+        if ($res) {
+            return $res;
         } else {
             return false;
         }

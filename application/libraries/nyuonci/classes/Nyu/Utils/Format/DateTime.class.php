@@ -56,7 +56,7 @@ class DateTime{
     public static function format($date, $format){
         if(!is_object($date)){
             $date = str_replace("/", "-", $date);
-            $date = new DateTime($date);
+            $date = new \DateTime($date);
         }
         return $date->format($format);
     }
@@ -67,7 +67,7 @@ class DateTime{
      * @return string
      */
     public static function dateFormToDb($date){
-        return self::format($date, 'Y-m-d');
+        return self::format(\DateTime::createFromFormat('d/m/Y', $date), 'Y-m-d');
     }
 
     /**
@@ -76,7 +76,7 @@ class DateTime{
      * @return string
      */
     public static function dateDbToForm($date){
-        return self::format($date, 'd/m/Y');
+        return self::format(\DateTime::createFromFormat('Y-m-d', $date), 'd/m/Y');
     }
 
     /**
@@ -108,8 +108,10 @@ class DateTime{
     public static function compareDates($date1, $date2){
         $date1 = str_replace("/", "-", $date1);
         $date2 = str_replace("/", "-", $date2);
-        $d1 = new DateTime($date1);
-        $d2 = new DateTime($date2);
+        
+        $d1 = new \DateTime($date1);
+        $d2 = new \DateTime($date2);
+        
         if($d1 > $d2){
             return 1;
         }elseif($d2 > $d1){
@@ -130,9 +132,9 @@ class DateTime{
      */
     public static function add($date, $interval, $format = 'd/m/Y'){
         $date = str_replace("/", "-", $date);
-        $date = new DateTime($date);
+        $date = new \DateTime($date);
         if(!is_object($interval)){
-            $interval = new DateInterval($interval);
+            $interval = new \DateInterval($interval);
         }
         $date->add($interval);
         return self::format($date, $format);
@@ -161,9 +163,9 @@ class DateTime{
      */
     public static function sub($date, $interval, $format = 'd/m/Y'){
         $date = str_replace("/", "-", $date);
-        $date = new DateTime($date);
+        $date = new \DateTime($date);
         if(!is_object($interval)){
-            $interval = new DateInterval($interval);
+            $interval = new \DateInterval($interval);
         }
         $date->sub($interval);
         return self::format($date, $format);
@@ -190,11 +192,11 @@ class DateTime{
     public static function diff($date1, $date2){
         if(!is_object($date1)){
             $date1 = str_replace("/", "-", $date1);
-            $date1 = new DateTime($date1);
+            $date1 = new \DateTime($date1);
         }
         if(!is_object($date2)){
             $date2 = str_replace("/", "-", $date2);
-            $date2 = new DateTime($date2);
+            $date2 = new \DateTime($date2);
         }
         return $date1->diff($date2)->format("%r%a");
     }

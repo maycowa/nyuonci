@@ -10,7 +10,7 @@ namespace Nyu\Database;
  * @version 1.0
  * @since 4.0
  */
-class QueryBuilder extends \Nyu\Core\CI{
+class QueryBuilder{
 
     /**
      * Campos a buscar/combinação de campos a buscar
@@ -59,14 +59,7 @@ class QueryBuilder extends \Nyu\Core\CI{
      * @var string
      */
     protected $limit = array();
-    
-    /**
-     * Construtor da classe
-     */
-    public function __construct() {
-        parent::__construct();
-    }
-    
+        
     /**
      * Adiciona um campo na consulta
      * @param string $field Campo a adicionar na consulta
@@ -185,7 +178,7 @@ class QueryBuilder extends \Nyu\Core\CI{
         
         /* Campos */
         if(!$this->fields){
-            throw new NyuQueryBuilderException("Campos não informados para a criação da consulta.");
+            throw new \Nyu\Exception\QueryBuilderException("Campos não informados para a criação da consulta.");
         }else{
             $first = true;
             foreach($this->fields as $fields){
@@ -196,7 +189,7 @@ class QueryBuilder extends \Nyu\Core\CI{
         
         /* Tabela Principal */
         if(!$this->table){
-            throw new NyuQueryBuilderException("Tabela não informada para a criação da consulta.");
+            throw new \Nyu\Exception\QueryBuilderException("Tabela não informada para a criação da consulta.");
         }else{
             $sql .= " FROM ".$this->table." ";
         }
@@ -213,7 +206,7 @@ class QueryBuilder extends \Nyu\Core\CI{
             $first = true;
             foreach($this->where as $where){
                 if(!$where['operator'] && !$first){
-                    throw new NyuQueryBuilderException("É necessário informar o operador para a condição '".$where['condition']."'");
+                    throw new \Nyu\Exception\QueryBuilderException("É necessário informar o operador para a condição '".$where['condition']."'");
                 }
                 if($where['condition']){
                     $sql .= (($first)?" WHERE ".$where['condition']." ":$where['operator']." ".$where['condition']." ");
@@ -244,7 +237,7 @@ class QueryBuilder extends \Nyu\Core\CI{
         
         if($this->limit){
             if(!$this->limit[0]){
-                throw new NyuQueryBuilderException("É necessário informar um limite inicial.");
+                throw new \Nyu\Exception\QueryBuilderException("É necessário informar um limite inicial.");
             }else{
                 $sql .= " LIMIT ".$this->limit[0] . (($this->limit[1])?", ".$this->limit[1]:"");
             }
